@@ -7,8 +7,8 @@
   - [1. Edge Model — Real-time Fusion Network (RFNet)](#1-edge-model--real-time-fusion-network-rfnet)
   - [2. Cloud Model — Large Vision-Language Models (GPT-4o & Qwen-VL)](#2-cloud-model--large-vision-language-models-gpt-4o--qwen-vl)
   - [3. Cloud-Edge Pipeline](#3-cloud-edge-pipeline)
-  - [4. Dataset — Cloud-Robotics Dataset](#4-dataset--cloud-robotics-dataset)
-  - [5. Repository Structure (Proposed)](#5-repository-structure-proposed)
+  - [4. Repository Structure (Proposed)](#4-repository-structure-proposed)
+  - [5. Dataset — Cloud-Robotics Dataset](#5-dataset--cloud-robotics-dataset)
   - [6. Optimizations — Speculative Decoding Accelerator](#6-optimizations--speculative-decoding-accelerator)
   - [7. Summary](#7-summary)
 - [Timeline](#timeline)
@@ -204,7 +204,7 @@ The LVLM performs **high-level semantic reasoning** from edge summaries, tasks, 
    - Message persistence: Redis stream buffer
    - Automatic retries with exponential backoff
 
-### 5. Repository Structure (Proposed)
+### 4. Repository Structure (Proposed)
 
 ```
 cloud-edge-perception-reasoning/
@@ -246,7 +246,7 @@ ianvs run -f benchmarkingjob.yaml
 ```
 ---
 
-### 4. Dataset — **Cloud-Robotics Dataset**
+### 5. Dataset — **Cloud-Robotics Dataset**
 
 This project uses the Cloud-Robotics dataset (<https://kubeedge-ianvs.github.io/index.html>), which is a multimodal, self-supervision-friendly dataset specifically designed for embodied intelligence. Its key features are as follows:
 
