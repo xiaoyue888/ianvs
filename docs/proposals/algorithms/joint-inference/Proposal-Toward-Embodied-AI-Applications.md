@@ -191,68 +191,18 @@ flowchart LR
 
 **Implementation Specifications**:
 
-1. The LVLM performs **high-level semantic reasoning** from edge summaries, tasks, and context, e.g.,
+The LVLM performs **high-level semantic reasoning** from edge summaries, tasks, and context, e.g.,
 
-    * Action decision: *“Brake and steer around the traffic cone.”*
-    * Scene Q\&A: *“Is there a pedestrian ahead? At what distance?”*
-    * Language navigation: *“Proceed 50 m along the left lane, then turn right.”
+  * Action decision: *“Brake and steer around the traffic cone.”*
+  * Scene Q\&A: *“Is there a pedestrian ahead? At what distance?”*
+  * Language navigation: *“Proceed 50 m along the left lane, then turn right.”
 
-2. **Protocol Stack**  
-   | Layer | Technology | Configuration |
-   |-------|------------|---------------|
-   | Application | Protobuf v3 | `syntax = "proto3";<br>message SceneSummary {<br> repeated Object objects = 1;<br> float scene_risk = 2; }` |
-   | Transport | MQTT v5 | QoS=1 (At least once delivery) |
-   | Security | TLS 1.3 | Mutual X.509 authentication |
-   | Compression | Zstandard | Level 3 (70% compression ratio) |
 
-3. **Data Schema**  
-   ```protobuf
-   message Object {
-     uint32 id = 1;
-     string class = 2;
-     float depth_mean = 3;
-     float depth_std = 4;
-     float risk_score = 5;
-     bytes rle_mask = 6; 
-   }
-   
-   message PerceptionFrame {
-     uint64 timestamp = 1;
-     repeated Object objects = 2;
-     float scene_risk = 3;
-     string sensor_id = 4;
-   }
-   ```
 
-3. **Fault Handling**  
+ **Fault Handling**  
    - Edge-side timeout: 300ms → Fallback to local rule-based planner
    - Message persistence: Redis stream buffer
    - Automatic retries with exponential backoff
-
----
-### 4. Dataset — **Cloud-Robotics Dataset**
-
-This project uses the Cloud-Robotics dataset (<https://kubeedge-ianvs.github.io/index.html>), which is a multimodal, self-supervision-friendly dataset specifically designed for embodied intelligence. Its key features are as follows:
-
-
-
-| Dimension | Description |
-|-----------|-------------|
-| **Multimodal sensing** | Synchronized **RGB, depth, IMU, LiDAR**; intrinsic/extrinsic calibration files provided. |
-| **Instance-level labels** | Pixel-accurate masks for 20 + classes, 3-D bboxes, object track IDs—ready for nav, grasp, avoidance. |
-| **Interaction & temporal** | Real robot / vehicle traversing **indoor homes, warehouses, campuses, urban roads**, preserving dynamic obstacles & rare events. |
-| **Task tags** | Executable waypoints, action scripts & risk priorities—evaluate the **perception → decision** chain directly. |
-| **Scale** | > 60 k RGB-D frame pairs, 2 h continuous sequences, ≈ 160 GB, splittable into light subsets. |
-| **Toolchain** | ROS bags, Web Replayer, Ianvs Adapter—ready out-of-the-box. |
-
-#### Data Copyright and License
-- License: Creative Commons BY-NC-SA 4.0, which permits academic sharing and derivative research, but prohibits commercial closed-source use.
-- Privacy: Sensitive areas such as human faces and license plates in the data have been blurred, in compliance with GDPR / PDPA.
-#### **Why for Embodied AI?**  
- More than static semantics, Cloud-Robotics covers **temporal, action, and sensor diversity**, letting algorithms validate the “see–think–act” loop. It already integrates with the Ianvs Benchmark for fast evaluation.
-
----
-
 
 ### 5. Repository Structure (Proposed)
 
@@ -295,6 +245,30 @@ cd cloud-edge-perception-reasoning
 ianvs run -f benchmarkingjob.yaml
 ```
 ---
+
+### 4. Dataset — **Cloud-Robotics Dataset**
+
+This project uses the Cloud-Robotics dataset (<https://kubeedge-ianvs.github.io/index.html>), which is a multimodal, self-supervision-friendly dataset specifically designed for embodied intelligence. Its key features are as follows:
+
+
+
+| Dimension | Description |
+|-----------|-------------|
+| **Multimodal sensing** | Synchronized **RGB, depth, IMU, LiDAR**; intrinsic/extrinsic calibration files provided. |
+| **Instance-level labels** | Pixel-accurate masks for 20 + classes, 3-D bboxes, object track IDs—ready for nav, grasp, avoidance. |
+| **Interaction & temporal** | Real robot / vehicle traversing **indoor homes, warehouses, campuses, urban roads**, preserving dynamic obstacles & rare events. |
+| **Task tags** | Executable waypoints, action scripts & risk priorities—evaluate the **perception → decision** chain directly. |
+| **Scale** | > 60 k RGB-D frame pairs, 2 h continuous sequences, ≈ 160 GB, splittable into light subsets. |
+| **Toolchain** | ROS bags, Web Replayer, Ianvs Adapter—ready out-of-the-box. |
+
+#### Data Copyright and License
+- License: Creative Commons BY-NC-SA 4.0, which permits academic sharing and derivative research, but prohibits commercial closed-source use.
+- Privacy: Sensitive areas such as human faces and license plates in the data have been blurred, in compliance with GDPR / PDPA.
+#### **Why for Embodied AI?**  
+ More than static semantics, Cloud-Robotics covers **temporal, action, and sensor diversity**, letting algorithms validate the “see–think–act” loop. It already integrates with the Ianvs Benchmark for fast evaluation.
+
+---
+
 ### 6. Optimizations — Speculative Decoding Accelerator
 
 During LVLM **decoding**, per-token autoregressive generation becomes the main bottleneck. We will introduce **speculative decoding** (assisted generation) to cut latency and GPU token cost.
@@ -336,7 +310,7 @@ Task 2 is planned to be implemented as follows:
 - Use structured prompts (enforcing ISO safety standards) to enable LVLMs to generate high-level guidance (e.g., action commands) from edge scene summaries.
 
 Task 3 is planned to be implemented as follows:
-- Design a pipeline with Protobuf for data structuring, MQTT v5 (QoS=1) for transport, TLS 1.3 for security, and Zstandard (Level 3) for compression (≤15KB/frame). 
+- Design a Cloud-Edge pipeline. 
 - Accelerate cloud inference via speculative decoding (40–60% latency reduction) and add fault handling (timeouts, Redis buffering) to ensure end-to-end latency <150ms.
 
 ---
