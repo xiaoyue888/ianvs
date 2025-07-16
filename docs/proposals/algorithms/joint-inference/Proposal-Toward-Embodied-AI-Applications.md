@@ -13,6 +13,7 @@
   - [7. Summary](#7-summary)
 - [Timeline](#timeline)
 - [References](#references)
+
 # A Multi-LLM Cloud-Edge Collaboration Paradigm Based on KubeEdge-Ianvs: Toward Embodied-AI Applications
 
 ## Motivation  
@@ -186,7 +187,7 @@ flowchart LR
 ---
 
 ### 3. Cloud-Edge Pipeline
-![](https://p.sda1.dev/25/cdc93b3be0a890f5f01583fa6929d7e4/image-20250716.png)
+![Pipeline](images/image-20250716.png)
 
 **Implementation Specifications**:
 
