@@ -1,7 +1,4 @@
-# A Multi-LLM Cloud-Edge Collaboration Paradigm Based on KubeEdge-Ianvs: Toward Embodied-AI Applications
-
-# 目录
-
+- [A Multi-LLM Cloud-Edge Collaboration Paradigm Based on KubeEdge-Ianvs: Toward Embodied-AI Applications](#A-Multi-LLM-Cloud-Edge)
 - [Motivation](#motivation)
     - [Goals](#goals)
 - [Proposal](#proposal)
@@ -16,6 +13,7 @@
   - [7. Summary](#7-summary)
 - [Timeline](#timeline)
 - [References](#references)
+# A Multi-LLM Cloud-Edge Collaboration Paradigm Based on KubeEdge-Ianvs: Toward Embodied-AI Applications
 
 ## Motivation  
 The rapid emergence of embodied AI agents – from warehouse logistics robots to autonomous surgical assistants – has exposed a critical architectural dilemma in real-world deployment. These systems must reconcile three competing demands: 
