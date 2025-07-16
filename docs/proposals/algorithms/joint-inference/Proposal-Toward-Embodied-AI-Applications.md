@@ -186,7 +186,7 @@ flowchart LR
 ---
 
 ### 3. Cloud-Edge Pipeline
-![Pipeline](https://meee.com.tw/I2LWLvv)
+![Pipeline](https://p.sda1.dev/25/cdc93b3be0a890f5f01583fa6929d7e4/image-20250716.png)
 
 **Implementation Specifications**:
 
