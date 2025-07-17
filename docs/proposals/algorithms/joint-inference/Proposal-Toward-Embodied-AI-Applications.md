@@ -36,16 +36,7 @@ Integrate large vision-language models (GPT-4o/Qwen-VL) to interpret edge-genera
 Designing an intelligent optimization decision maker that dynamically classify inputs into _edge-suitable_ (low-complexity) and _cloud-required_ (high-complexity) categories. Compatible with existing `ianvs` Joint Inference pipeline  
 ## Proposal
 We propose a tiered intelligence framework where edge devices and cloud-based large models collaborate through semantic distillation. The edge processes raw sensor data into compact scene representations (object masks, depth maps, and risk scores), while the cloud interprets these abstractions using large vision-language models (LVLMs) to generate actionable insights. This division of labor achieves three breakthroughs: (1) real-time safety through edge-localized perception, (2) human-like reasoning via cloud LVLMs, and (3)resource efficiency through adaptive offloading, minimizing redundant cloud computation while preserving critical reasoning capabilities.  
-```mermaid
-flowchart LR
-    A[Raw Sensor Data] --> B[Edge]
-    B --> C{Decision Model}
-    C --> D[Cloud]
-    C --> E[Local Action]
-    D --> F[High-Level Reasoning]
-    E & F --> G[Result Fusion]
-    G --> H[Action Execution]
-```
+
 ### Use Cases
 - **Delivery Robots**: Local obstacle avoidance (30 FPS) + cloud-based route optimization  
 - **Vehicle ADAS**: Instant collision detection + contextual hazard prediction  
@@ -56,7 +47,14 @@ flowchart LR
 ## Design Details
 
 ### 1. Edge Model — **Real-time Fusion Network (RFNet)**
+| Aspect | Details |
+|--------|---------|
+| **Paper** | Sun et al., *IEEE RA-L 2020*: “Real-time Fusion Network for RGB-D Semantic Segmentation Incorporating Unexpected Obstacle Detection for Road-Driving Images” |
+| **Overall architecture** | **Dual-branch Encoder**: RGB + Depth<br>**Progressive Fusion**:<br> • *Depth-Guided Spatial Attention* (early) – filters RGB noise via depth edges.<br> • *Channel-wise SE Fusion* (late) – color/depth complementarity.<br>**Decoder**: lightweight ASFF + skip connections. |
+| **Multi-task heads** | 1. Semantic segmentation <br>2. Unexpected Obstacle Detection (UOD)  |
+| **Project usage** | Input synchronized RGB + depth (or MonoDepth2); output: instance masks, UOD heat-map, per-instance `depth_mean`; RLE + MsgPack compression before transmission. |
 
+RFNet delivers both pixel-level semantics and incorporates unexpected Obstacle Detection capabilities, making it particularly crucial for autonomous driving and outdoor mobile robotics. This dual functionality addresses the core perceptual demands of dynamic unstructured environments.
 ### 2. Cloud Model — **Large Vision-Language Models** (GPT-4o & Qwen-VL)
 |  | GPT-4o-mini (Vision) | Qwen-VL-Max |
 |---|---------------------|--------------|
