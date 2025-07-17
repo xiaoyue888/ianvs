@@ -37,12 +37,12 @@ Designing an intelligent optimization decision maker that dynamically classify i
 ## Proposal
 We propose a tiered intelligence framework where edge devices and cloud-based large models collaborate through semantic distillation. The edge processes raw sensor data into compact scene representations (object masks, depth maps, and risk scores), while the cloud interprets these abstractions using large vision-language models (LVLMs) to generate actionable insights. This division of labor achieves three breakthroughs: (1) real-time safety through edge-localized perception, (2) human-like reasoning via cloud LVLMs, and (3)resource efficiency through adaptive offloading, minimizing redundant cloud computation while preserving critical reasoning capabilities.  
 ```mermaid
-    A[Raw Sensor Data] --> B{Decision Model\n(ianvs/algorithms/joint-inference/optimizer.py)}
-    B -->|Simple Sample| C[Edge Processing]
-    B -->|Complex Sample| D[Cloud Inference]
-    C -->|Low Confidence| D[Re-evaluate in Cloud]
+flowchart LR
+    A[Raw Sensor Data] --> B[Edge]
+    B --> C{Decision Model}
+    C --> D[Cloud]
     C --> E[Local Action]
-    D --> F[Global Optimization]
+    D --> F[High-Level Reasoning]
     E & F --> G[Result Fusion]
     G --> H[Action Execution]
 ```
@@ -69,13 +69,14 @@ We propose a tiered intelligence framework where edge devices and cloud-based la
 #### Serving Infrastructure
 ```mermaid
 flowchart LR
-    A[Raw Sensor Data] --> B[Edge]
-    B --> C{Decision Model}
-    C --> D[Cloud]
-    C --> E[Local Action]
-    D --> F[High-Level Reasoning]
-    E & F --> G[Result Fusion]
-    G --> H[Action Execution]
+    A[Edge JSON] --> B[API Gateway]
+    B --> C[Prompt Engine]
+    C --> D{vLLM Cluster}
+    D --> E[GPT-4o]
+    D --> F[Qwen-VL]
+    E --> G[Response Formatter]
+    F --> G
+    G --> H[Action Planner]
 ```
 
 **Implementation Details**:
